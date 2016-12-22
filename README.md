@@ -1,5 +1,5 @@
 # htlActiveDirectory
-Erlaubt über das Paket activedirectory den Zugriff auf das Active Directory von htl-wien5.schule.
+Erlaubt über das Paket activedirectory den Zugriff auf das Active Directory von htl-wien5.schule. Der Zugriff erfolgt auf den Domänencontroller htl-wien5.schule. Dieser ist nur innerhalb des Schulnetzwerkes oder über VPN erreichbar.
 
 ```javascript
 
