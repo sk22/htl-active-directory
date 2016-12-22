@@ -6,6 +6,9 @@ Erlaubt über das Paket activedirectory den Zugriff auf das Active Directory von
 2. npm Install
 3. `node test.js username password`
 
+# Moduldokumentation
+Generiert mit jsdoc2md: https://www.npmjs.com/package/jsdoc-to-markdown
+
 <a name="HtlActiveDirectory"></a>
 
 ## HtlActiveDirectory
