@@ -1,0 +1,11 @@
+{
+  "name": "htl_active_directory",
+  "version": "0.0.1",
+  "description": "Zugriff auf das AD von htl-wien5.schule",
+  "main": "htl_active_directory.class.js",
+  "dependencies": {
+    "activedirectory": "*"
+  },
+  "author": "Michael Schletz",
+  "license": "ISC"
+}
