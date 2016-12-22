@@ -70,7 +70,7 @@ HtlActiveDirectory.prototype.getGroupMembership = function (username, onSuccess,
     onError = typeof onSuccess === "function" ? onError : function () { return; }
 
     /* Vorher wurde kein Login gemacht. */
-    if (this.ad === null) {
+    if (this.adInstance === null) {
         return onError("NOT_CONNECTED");
     }
 
