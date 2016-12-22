@@ -1,10 +1,4 @@
-# htlActiveDirectory
-Erlaubt über das Paket activedirectory den Zugriff auf das Active Directory von htl-wien5.schule. Der Zugriff erfolgt auf den Domänencontroller htl-wien5.schule. Dieser ist nur innerhalb des Schulnetzwerkes oder über VPN erreichbar.
-
-## Installation
-1. `git clone https://github.com/schletz/htlActiveDirectory`
-2. npm Install
-3. `node test.js username password`
+<a name="HtlActiveDirectory"></a>
 
 ## HtlActiveDirectory
 **Kind**: global class  
@@ -23,8 +17,7 @@ Führt Abfragen im Active Directory von htl-wien5.schule durch.
 <a name="HtlActiveDirectory+login"></a>
 
 ### htlActiveDirectory.login(username, password, onSuccess, onError)
-Prüft, ob der übergebene Benutzernamen und das Passwort korrekt sind, indem eine 
-Authentifizierung im AD versucht wird.
+Prüft, ob der übergebene Benutzernamen und das Passwort korrekt sind, indem eine Authentifizierung im AD versucht wird.
 
 **Kind**: instance method of <code>[HtlActiveDirectory](#HtlActiveDirectory)</code>  
 
@@ -38,12 +31,7 @@ Authentifizierung im AD versucht wird.
 <a name="HtlActiveDirectory+getGroupMembership"></a>
 
 ### htlActiveDirectory.getGroupMembership(username, onSuccess, onError)
-Liefert alle Gruppen, in der der übergebene User Mitglied ist. Dieser User muss nicht der eigene
-User sein. Eine Suche ohne Login (anonym) ist jedoch durch die Rechteeinstellungen im AD nicht
-möglich. 
-Meistens wird der User seine eigenen Gruppenmitgliedschaften heraussuchen, d. h. ein login wird
-mit den übermittelten Userdaten durchgeführt. Danach werden von diesem User die Gruppen 
-herausgesucht.
+Liefert alle Gruppen, in der der übergebene User Mitglied ist. Dieser User muss nicht der eigeneUser sein. Eine Suche ohne Login (anonym) ist jedoch durch die Rechteeinstellungen im AD nichtmöglich. Meistens wird der User seine eigenen Gruppenmitgliedschaften heraussuchen, d. h. ein login wirdmit den übermittelten Userdaten durchgeführt. Danach werden von diesem User die Gruppen herausgesucht.
 
 **Kind**: instance method of <code>[HtlActiveDirectory](#HtlActiveDirectory)</code>  
 

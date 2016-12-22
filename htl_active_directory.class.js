@@ -1,22 +1,25 @@
+/*jslint node white */
+"use strict";
 var ActiveDirectory = require('activedirectory');
 
 /**
  * Führt Abfragen im Active Directory von htl-wien5.schule durch.
+ * @class
  */
 function HtlActiveDirectory() {
     this.adInstance = null;
 }
-   
+
 /**
- * 
+ * Prüft, ob der übergebene Benutzernamen und das Passwort korrekt sind, indem eine 
+ * Authentifizierung im AD versucht wird. 
  * 
  * @param {string} username Der Username ohne Prefixe wie Domainnamen (einfach in der Form ABC12345 
  * übergeben)
  * @param {string} password Das Passwort im Klartext.
  * @param {function()} onSuccess Wird aufgerufen, wenn das Login erfolgreich war.
- * @param {onError(message:string, innerException:object)} onError Wird aufgerufenb, wenn das Login
+ * @param {function(message:string, innerException:object)} onError Wird aufgerufenb, wenn das Login
  * nicht erfolgreich war. message kann "INVALID_ARGUMENTS", "LOGIN_FAILED" oder "SERVER_ERROR" sein.
- * @returns
  */
 HtlActiveDirectory.prototype.login = function (username, password, onSuccess, onError) {
     onSuccess = typeof onSuccess === "function" ? onSuccess : function () { return; }
@@ -26,9 +29,10 @@ HtlActiveDirectory.prototype.login = function (username, password, onSuccess, on
     }
 
     this.adInstance = new ActiveDirectory({
-        /* ldaps liefert einen Fehler, da der Server dann GSSAPI verlangt */
-        url: 'ldap://htl-wien5.schule',
+        url: 'ldaps://htl-wien5.schule',
         baseDN: 'DC=htl-wien5,DC=schule',
+        /* Wichtig für LDAPS, da wir unbekannten Root CAs (der Domäne) vertrauen müssen */
+        tlsOptions: {requestCert: true, rejectUnauthorized: false},
         /* Diese Daten werden für getGroupMembership verwendet. Beim Usernamen muss immer 
          * @htl-wien5.schule für ein ldap bind angehängt werden. */
         username: username + "@htl-wien5.schule",
@@ -105,7 +109,6 @@ HtlActiveDirectory.prototype.getGroupMembership = function (username, onSuccess,
  * @param {function(json[])} onSuccess JSON Array mit allen Details zu den Userobjekten. Am 
  * interessantesten ist das dn Property, es gibt den eindeutigen Usernamen an.
  * @param {function(string)} onError Liefert "SERVER_ERROR" oder "GROUP_UNKNOWN"
- * @returns
  */
 HtlActiveDirectory.prototype.getUsersOfGroup = function (groupName, onSuccess, onError) {
     onSuccess = typeof onSuccess === "function" ? onSuccess : function () { return; }
