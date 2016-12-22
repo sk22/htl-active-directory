@@ -45,7 +45,7 @@ Authentifizierung im AD versucht wird.
 | username | <code>string</code> | Der Username ohne Prefixe wie Domainnamen (einfach in der Form ABC12345  übergeben) |
 | password | <code>string</code> | Das Passwort im Klartext. |
 | onSuccess | <code>function</code> | Wird aufgerufen, wenn das Login erfolgreich war. |
-| onError | <code>function</code> | Wird aufgerufenb, wenn das Login nicht erfolgreich war. message kann "INVALID_ARGUMENTS", "LOGIN_FAILED" oder "SERVER_ERROR" sein. |
+| onError | <code>function</code> | Wird aufgerufen, wenn das Login nicht erfolgreich war. message kann "INVALID_ARGUMENTS", "LOGIN_FAILED" oder "SERVER_ERROR" sein. |
 
 **Example**  
 ```js
