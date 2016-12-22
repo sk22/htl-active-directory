@@ -21,7 +21,7 @@ function HtlActiveDirectory() {
  * übergeben)
  * @param {string} password Das Passwort im Klartext.
  * @param {function()} onSuccess Wird aufgerufen, wenn das Login erfolgreich war.
- * @param {function(message:string, innerException:object)} onError Wird aufgerufenb, wenn das Login
+ * @param {function(message:string, innerException:object)} onError Wird aufgerufen, wenn das Login
  * nicht erfolgreich war. message kann "INVALID_ARGUMENTS", "LOGIN_FAILED" oder "SERVER_ERROR" sein.
  * @example
  * htlAd.login(sentUsername, sentPassword,
@@ -79,7 +79,7 @@ HtlActiveDirectory.prototype.login = function (username, password, onSuccess, on
  * herausgesucht.
  * 
  * @param {string} username
- * @param {function(string[])} onSuccess Liefert ein Array mti allen Gruppenmitgliedschaften.
+ * @param {function(string[])} onSuccess Liefert ein Array mit allen Gruppenmitgliedschaften.
  * @param {function(string)} onError Liefert "NOT_CONNECTED", "SERVER_ERROR" oder "USER_UNKNOWN"
  * @example
  * htlAd.getUsersOfGroup("AlleLehrende",
