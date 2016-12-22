@@ -3,7 +3,7 @@ Erlaubt über das Paket activedirectory den Zugriff auf das Active Directory von
 
 ## Installation
 1. `git clone https://github.com/schletz/htlActiveDirectory`
-2. `npm Install`
+2. `npm install`
 3. `node test.js username password`
 
 # Moduldokumentation
