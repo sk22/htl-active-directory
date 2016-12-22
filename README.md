@@ -18,10 +18,9 @@ Detaillierte Methodenbeschreibungen sind in den Quellcodekommentaren.
 Es wird empfohlen, die Ausgabe mit `node testscript.js > ausgabe.txt` umzuleiten, da die Textmenge recht groß ist.
 
 ```javascript
-var htlAd = require("./htl_active_directory.class")
-
-var sentUsername = "user"
-var sentPassword = "***"
+var htlAd = require("./htl_active_directory.class");
+var sentUsername = "user";
+var sentPassword = "***";
 
 htlAd.login(sentUsername, sentPassword,
     /* onSuccess bei Login */
