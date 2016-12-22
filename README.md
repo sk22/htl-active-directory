@@ -1,5 +1,8 @@
 # htlActiveDirectory
-Erlaubt über das Paket activedirectory den Zugriff auf das Active Directory von htl-wien5.schule. Der Zugriff erfolgt auf den Domänencontroller htl-wien5.schule. Dieser ist nur innerhalb des Schulnetzwerkes oder über VPN erreichbar.
+Node JS Modul für die LDAP Autentifizierung sowie das Abfragen von Daten aus dem schuleigenen
+Active Directory. Der Zugriff erfolgt über das Paket [activedirectory](https://www.npmjs.com/package/activedirectory).
+Da der Domänencontroller nur eine lokale IP Adresse und eine lokale Domäne (htl-wien5.schule) besitzt,
+ist der Zugriff nur innerhalb des Schulnetzwerkes oder über VPN möglich.
 
 ## Installation
 1. `git clone https://github.com/schletz/htlActiveDirectory`
