@@ -74,7 +74,7 @@ herausgesucht.
 | Param | Type | Description |
 | --- | --- | --- |
 | username | <code>string</code> |  |
-| onSuccess | <code>function</code> | Liefert ein Array mti allen Gruppenmitgliedschaften. |
+| onSuccess | <code>function</code> | Liefert ein Array mit allen Gruppenmitgliedschaften. |
 | onError | <code>function</code> | Liefert "NOT_CONNECTED", "SERVER_ERROR" oder "USER_UNKNOWN" |
 
 **Example**  
