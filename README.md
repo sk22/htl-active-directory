@@ -2,17 +2,22 @@
 Erlaubt über das Paket activedirectory den Zugriff auf das Active Directory von htl-wien5.schule. Der Zugriff erfolgt auf den Domänencontroller htl-wien5.schule. Dieser ist nur innerhalb des Schulnetzwerkes oder über VPN erreichbar.
 
 ## Methoden und Properties
-login(username:string, password:string, onSuccess:function (), onError:function (message:string))
-getGroupMembership (username.string, onSuccess:function(groups:string[]), onError:function(message:string))
-getUsersOfGroup (groupName:string, onSuccess:function(users:json[]), onError:function(message:string))
-adInstance:object Originalinstanz der ActiveDirectory Klasse des Moduls activedirectory
+```
+login (username:string, password:string, onSuccess:function (), onError:function (message:string));
+
+getGroupMembership (username.string, onSuccess:function(groups:string[]), onError:function(message:string));
+
+getUsersOfGroup (groupName:string, onSuccess:function(users:json[]), onError:function(message:string));
+
+adInstance:object Originalinstanz der ActiveDirectory Klasse des Moduls activedirectory;
+```
 Detaillierte Methodenbeschreibungen sind in den Quellcodekommentaren.
+
 
 ## Beispielcode
 Es wird empfohlen, die Ausgabe mit `node testscript.js > ausgabe.txt` umzuleiten, da die Textmenge recht groß ist.
 
 ```javascript
-
 var htlAd = require("./htl_active_directory.class")
 
 var sentUsername = "user"
