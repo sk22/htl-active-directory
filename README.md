@@ -5,7 +5,7 @@ Erlaubt über das Paket activedirectory den Zugriff auf das Active Directory von
 
 var htlAd = require("./htl_active_directory.class")
 
-var sentUsername = "schletz"
+var sentUsername = "user"
 var sentPassword = "***"
 
 htlAd.login(sentUsername, sentPassword,
