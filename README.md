@@ -6,6 +6,8 @@ Erlaubt über das Paket activedirectory den Zugriff auf das Active Directory von
 2. npm Install
 3. `node test.js username password`
 
+<a name="HtlActiveDirectory"></a>
+
 ## HtlActiveDirectory
 **Kind**: global class  
 
@@ -20,6 +22,10 @@ Erlaubt über das Paket activedirectory den Zugriff auf das Active Directory von
 ### new HtlActiveDirectory()
 Führt Abfragen im Active Directory von htl-wien5.schule durch.
 
+**Example**  
+```js
+var htlAd = require("./htl_active_directory.class");
+```
 <a name="HtlActiveDirectory+login"></a>
 
 ### htlActiveDirectory.login(username, password, onSuccess, onError)
@@ -35,6 +41,18 @@ Authentifizierung im AD versucht wird.
 | onSuccess | <code>function</code> | Wird aufgerufen, wenn das Login erfolgreich war. |
 | onError | <code>function</code> | Wird aufgerufenb, wenn das Login nicht erfolgreich war. message kann "INVALID_ARGUMENTS", "LOGIN_FAILED" oder "SERVER_ERROR" sein. |
 
+**Example**  
+```js
+htlAd.login(sentUsername, sentPassword,
+   // onSuccess bei Login
+   function () {
+       console.log("Login OK.");
+   },
+   // onError bei Login 
+  function (message, innerMessage) {
+      console.log(message, innerMessage);
+  }
+```
 <a name="HtlActiveDirectory+getGroupMembership"></a>
 
 ### htlActiveDirectory.getGroupMembership(username, onSuccess, onError)
@@ -53,6 +71,18 @@ herausgesucht.
 | onSuccess | <code>function</code> | Liefert ein Array mti allen Gruppenmitgliedschaften. |
 | onError | <code>function</code> | Liefert "NOT_CONNECTED", "SERVER_ERROR" oder "USER_UNKNOWN" |
 
+**Example**  
+```js
+htlAd.getUsersOfGroup("AlleLehrende",
+           // onSuccess
+           function (userlist) {
+               console.log("Members von AlleLehrende", userlist);
+          },
+           // onError
+           function (message) {
+               console.log(message);
+           });
+```
 <a name="HtlActiveDirectory+getUsersOfGroup"></a>
 
 ### htlActiveDirectory.getUsersOfGroup(groupName, onSuccess, onError)

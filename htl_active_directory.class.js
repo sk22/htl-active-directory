@@ -1,10 +1,13 @@
-/*jslint node white */
+/*jslint node white this */
+
 "use strict";
 var ActiveDirectory = require('activedirectory');
 
 /**
  * Führt Abfragen im Active Directory von htl-wien5.schule durch.
  * @class
+ * @example
+ * var htlAd = require("./htl_active_directory.class");
  */
 function HtlActiveDirectory() {
     this.adInstance = null;
@@ -20,6 +23,16 @@ function HtlActiveDirectory() {
  * @param {function()} onSuccess Wird aufgerufen, wenn das Login erfolgreich war.
  * @param {function(message:string, innerException:object)} onError Wird aufgerufenb, wenn das Login
  * nicht erfolgreich war. message kann "INVALID_ARGUMENTS", "LOGIN_FAILED" oder "SERVER_ERROR" sein.
+ * @example
+ * htlAd.login(sentUsername, sentPassword,
+ *    // onSuccess bei Login
+ *    function () {
+ *        console.log("Login OK.");
+ *    },
+ *    // onError bei Login 
+ *   function (message, innerMessage) {
+ *       console.log(message, innerMessage);
+ *   }
  */
 HtlActiveDirectory.prototype.login = function (username, password, onSuccess, onError) {
     onSuccess = typeof onSuccess === "function" ? onSuccess : function () { return; };
@@ -68,6 +81,16 @@ HtlActiveDirectory.prototype.login = function (username, password, onSuccess, on
  * @param {string} username
  * @param {function(string[])} onSuccess Liefert ein Array mti allen Gruppenmitgliedschaften.
  * @param {function(string)} onError Liefert "NOT_CONNECTED", "SERVER_ERROR" oder "USER_UNKNOWN"
+ * @example
+ * htlAd.getUsersOfGroup("AlleLehrende",
+ *            // onSuccess
+ *            function (userlist) {
+ *                console.log("Members von AlleLehrende", userlist);
+ *           },
+ *            // onError
+ *            function (message) {
+ *                console.log(message);
+ *            });
  */
 HtlActiveDirectory.prototype.getGroupMembership = function (username, onSuccess, onError) {
     onSuccess = typeof onSuccess === "function" ? onSuccess : function () { return; };
@@ -100,7 +123,7 @@ HtlActiveDirectory.prototype.getGroupMembership = function (username, onSuccess,
             return onError("USER_UNKNOWN");
         }
     });
-}
+};
 
 /**
  * Listet alle User, die Mitglied der angegebenen Gruppe sind.
@@ -111,8 +134,8 @@ HtlActiveDirectory.prototype.getGroupMembership = function (username, onSuccess,
  * @param {function(string)} onError Liefert "SERVER_ERROR" oder "GROUP_UNKNOWN"
  */
 HtlActiveDirectory.prototype.getUsersOfGroup = function (groupName, onSuccess, onError) {
-    onSuccess = typeof onSuccess === "function" ? onSuccess : function () { return; }
-    onError = typeof onSuccess === "function" ? onError : function () { return; }
+    onSuccess = typeof onSuccess === "function" ? onSuccess : function () { return; };
+    onError = typeof onSuccess === "function" ? onError : function () { return; };
     if (typeof groupName !== "string") {
         return onError("INVALID_ARGUMENTS");
     }
@@ -128,6 +151,6 @@ HtlActiveDirectory.prototype.getUsersOfGroup = function (groupName, onSuccess, o
             return onError("GROUP_UNKNOWN");
         }
     });
-}
+};
 
 module.exports = new HtlActiveDirectory();
