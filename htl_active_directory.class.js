@@ -22,8 +22,8 @@ function HtlActiveDirectory() {
  * nicht erfolgreich war. message kann "INVALID_ARGUMENTS", "LOGIN_FAILED" oder "SERVER_ERROR" sein.
  */
 HtlActiveDirectory.prototype.login = function (username, password, onSuccess, onError) {
-    onSuccess = typeof onSuccess === "function" ? onSuccess : function () { return; }
-    onError = typeof onSuccess === "function" ? onError : function () { return; }
+    onSuccess = typeof onSuccess === "function" ? onSuccess : function () { return; };
+    onError = typeof onSuccess === "function" ? onError : function () { return; };
     if (typeof username !== "string" || typeof password !== "string") {
         return onError("INVALID_ARGUMENTS");
     }
@@ -70,8 +70,8 @@ HtlActiveDirectory.prototype.login = function (username, password, onSuccess, on
  * @param {function(string)} onError Liefert "NOT_CONNECTED", "SERVER_ERROR" oder "USER_UNKNOWN"
  */
 HtlActiveDirectory.prototype.getGroupMembership = function (username, onSuccess, onError) {
-    onSuccess = typeof onSuccess === "function" ? onSuccess : function () { return; }
-    onError = typeof onSuccess === "function" ? onError : function () { return; }
+    onSuccess = typeof onSuccess === "function" ? onSuccess : function () { return; };
+    onError = typeof onSuccess === "function" ? onError : function () { return; };
 
     /* Vorher wurde kein Login gemacht. */
     if (this.adInstance === null) {
@@ -92,7 +92,7 @@ HtlActiveDirectory.prototype.getGroupMembership = function (username, onSuccess,
                         groupArray.push(matches[1]);
                     }
                 }
-                catch (e) { }
+                catch (e) { return;  }
             });
             return onSuccess(groupArray);
         }
