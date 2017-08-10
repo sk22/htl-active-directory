@@ -4,7 +4,8 @@
   "description": "Zugriff auf das AD von htl-wien5.schule",
   "main": "htl_active_directory.class.js",
   "dependencies": {
-    "activedirectory": "*"
+    "activedirectory": "*",
+    "prompt-password": "^1.2.0"
   },
   "author": "Michael Schletz",
   "license": "ISC"

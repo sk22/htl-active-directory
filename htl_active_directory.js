@@ -1,17 +1,84 @@
-/*jslint node white this */
-
 "use strict";
 var ActiveDirectory = require('activedirectory');
 
-/**
- * Führt Abfragen im Active Directory von htl-wien5.schule durch.
- * @class
- * @example
- * var htlAd = require("./htl_active_directory.class");
- */
-function HtlActiveDirectory() {
-    this.adInstance = null;
-}
+const methods = connection => ({
+  getGroupMembership: username => new Promise(((resolve, reject) => {
+    connection.getGroupMembershipForUser(username, function(err, groups) {
+      var groupArray = [];
+      if (err) {
+        return reject(err);
+      }
+      if (groups) {
+        /* Die Gruppennamen lauten cn=....,ou=,..,ou=... Wir möchten nur den cn (common name) */
+        groups.forEach(function(val) {
+          try {
+            var matches = val.dn.match(/cn=([^,]+)/i);
+            if (matches !== null && typeof matches[1] === "string") {
+              groupArray.push(matches[1]);
+            }
+          } catch (e) {
+            return;
+          }
+        });
+        return resolve(groupArray);
+      } else {
+        return reject(new Error("USER_UNKNOWN"));
+      }
+    });
+  })),
+  getUsersOfGroup: groupName => new Promise((resolve, reject) => {
+    if (typeof groupName !== "string") {
+      return reject(new Error("INVALID_ARGUMENTS"));
+    }
+
+    connection.getUsersForGroup(groupName, function(err, users) {
+      if (err) {
+        return reject(err);
+      }
+      if (users) {
+        return resolve(users);
+      } else {
+        return reject(new Error("GROUP_UNKNOWN"));
+      }
+    });
+  })
+})
+
+const htlActiveDirectory = (username, password) => new Promise((resolve, reject) => {
+  if (typeof username !== "string" || typeof password !== "string") {
+    return reject(new Error("INVALID_ARGUMENTS"))
+  }
+
+  const ad = new ActiveDirectory({
+    url: 'ldaps://htl-wien5.schule',
+    baseDN: 'DC=htl-wien5,DC=schule',
+    /* Wichtig für LDAPS, da wir unbekannten Root CAs (der Domäne) vertrauen müssen */
+    tlsOptions: {
+      requestCert: true,
+      rejectUnauthorized: false
+    },
+    /* Diese Daten werden für getGroupMembership verwendet. Beim Usernamen muss immer 
+     * @htl-wien5.schule für ein ldap bind angehängt werden. */
+    username: username + "@htl-wien5.schule",
+    password: password
+  });
+  
+  /* Wir prüfen die Logindaten schon vorher, somit können wir das Login und das Suchen der
+   * Gruppenmitgliedschaft trennen */
+  ad.authenticate(username + "@htl-wien5.schule", password, function(err, auth) {
+    if (err !== null) {
+      if (err.toString().indexOf("InvalidCredentialsError") !== -1) {
+        return reject(new Error("LOGIN_FAILED"));
+      } else {
+        return reject(err);
+      }
+    }
+    if (auth) {
+      console.log(auth)
+      return resolve(methods(ad))
+    }
+  });
+})
 
 /**
  * Prüft, ob der übergebene Benutzernamen und das Passwort korrekt sind, indem eine 
@@ -34,40 +101,6 @@ function HtlActiveDirectory() {
  *       console.log(message, innerMessage);
  *   }
  */
-HtlActiveDirectory.prototype.login = function (username, password, onSuccess, onError) {
-    onSuccess = typeof onSuccess === "function" ? onSuccess : function () { return; };
-    onError = typeof onSuccess === "function" ? onError : function () { return; };
-    if (typeof username !== "string" || typeof password !== "string") {
-        return onError("INVALID_ARGUMENTS");
-    }
-
-    this.adInstance = new ActiveDirectory({
-        url: 'ldaps://htl-wien5.schule',
-        baseDN: 'DC=htl-wien5,DC=schule',
-        /* Wichtig für LDAPS, da wir unbekannten Root CAs (der Domäne) vertrauen müssen */
-        tlsOptions: {requestCert: true, rejectUnauthorized: false},
-        /* Diese Daten werden für getGroupMembership verwendet. Beim Usernamen muss immer 
-         * @htl-wien5.schule für ein ldap bind angehängt werden. */
-        username: username + "@htl-wien5.schule",
-        password: password
-    });
-
-    /* Wir prüfen die Logindaten schon vorher, somit können wir das Login und das Suchen der
-     * Gruppenmitgliedschaft trennen */
-    this.adInstance.authenticate(username + "@htl-wien5.schule", password, function (err, auth) {
-        if (err !== null) {
-            if (err.toString().indexOf("InvalidCredentialsError") !== -1) {
-                return onError("LOGIN_FAILED");
-            }
-            else {
-                return onError("SERVER_ERROR", err);
-            }
-        }
-        if (auth) {
-            return onSuccess();
-        }
-    });
-};
 
 
 /**
@@ -92,38 +125,6 @@ HtlActiveDirectory.prototype.login = function (username, password, onSuccess, on
  *                console.log(message);
  *            });
  */
-HtlActiveDirectory.prototype.getGroupMembership = function (username, onSuccess, onError) {
-    onSuccess = typeof onSuccess === "function" ? onSuccess : function () { return; };
-    onError = typeof onSuccess === "function" ? onError : function () { return; };
-
-    /* Vorher wurde kein Login gemacht. */
-    if (this.adInstance === null) {
-        return onError("NOT_CONNECTED");
-    }
-
-    this.adInstance.getGroupMembershipForUser(username, function (err, groups) {
-        var groupArray = [];
-        if (err) {
-            return onError("SERVER_ERROR", err);
-        }
-        if (groups) {
-            /* Die Gruppennamen lauten cn=....,ou=,..,ou=... Wir möchten nur den cn (common name) */
-            groups.forEach(function (val) {
-                try {
-                    var matches = val.dn.match(/cn=([^,]+)/i);
-                    if (matches !== null && typeof matches[1] === "string") {
-                        groupArray.push(matches[1]);
-                    }
-                }
-                catch (e) { return;  }
-            });
-            return onSuccess(groupArray);
-        }
-        else {
-            return onError("USER_UNKNOWN");
-        }
-    });
-};
 
 /**
  * Listet alle User, die Mitglied der angegebenen Gruppe sind.
@@ -133,24 +134,5 @@ HtlActiveDirectory.prototype.getGroupMembership = function (username, onSuccess,
  * interessantesten ist das dn Property, es gibt den eindeutigen Usernamen an.
  * @param {function(string)} onError Liefert "SERVER_ERROR" oder "GROUP_UNKNOWN"
  */
-HtlActiveDirectory.prototype.getUsersOfGroup = function (groupName, onSuccess, onError) {
-    onSuccess = typeof onSuccess === "function" ? onSuccess : function () { return; };
-    onError = typeof onSuccess === "function" ? onError : function () { return; };
-    if (typeof groupName !== "string") {
-        return onError("INVALID_ARGUMENTS");
-    }
 
-    this.adInstance.getUsersForGroup(groupName, function (err, users) {
-        if (err) {
-            return onError("SERVER_ERROR", err);
-        }
-        if (users) {
-            onSuccess(users);
-        }
-        else {
-            return onError("GROUP_UNKNOWN");
-        }
-    });
-};
-
-module.exports = HtlActiveDirectory;
+module.exports = htlActiveDirectory;
