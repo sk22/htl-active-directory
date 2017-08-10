@@ -5,7 +5,8 @@ if (typeof process.argv[2] !== "string" || typeof process.argv[3] !== "string") 
     throw "Ungültiger Aufruf. Syntax: node test.js username passwort.";
 }
 
-var htlAd = require("./htl_active_directory.class");
+var HtlActiveDirectory = require("./htl_active_directory");
+var htlAd = new HtlActiveDirectory();
 
 var sentUsername = process.argv[2];
 var sentPassword = process.argv[3];
