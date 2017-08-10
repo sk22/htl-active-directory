@@ -153,4 +153,4 @@ HtlActiveDirectory.prototype.getUsersOfGroup = function (groupName, onSuccess, o
     });
 };
 
-module.exports = new HtlActiveDirectory();
+module.exports = HtlActiveDirectory;
